@@ -12,6 +12,8 @@ public final class Dvfs {
   private static final String FREQ_PATH = "/sys/devices/system/cpu/cpu%d/cpufreq";
   private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
   private static final int[] AVAILABLE_FREQUENCIES = readAvailableFrequencies();
+  // TODO: the governors are not always the same so we may need to do some version control to
+  // guarantee that the methods that change frequencies will not break
   private static final String[] AVAILABLE_GOVERNORS = readAvailableGovernors();
 
   public static int[] getAvailableFrequencies() {
