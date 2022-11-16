@@ -15,6 +15,8 @@ public final class Dvfs {
   // TODO: the governors are not always the same so we may need to do some version control to
   // guarantee that the methods that change frequencies will not break
   private static final String[] AVAILABLE_GOVERNORS = readAvailableGovernors();
+  private static final String DEFAULT_GOVERNOR = "ondemand";
+  private static final String SCALABLE_GOVERNOR = "userspace";
 
   public static int[] getAvailableFrequencies() {
     return Arrays.copyOf(AVAILABLE_FREQUENCIES, AVAILABLE_FREQUENCIES.length);
@@ -36,7 +38,7 @@ public final class Dvfs {
 
   /** Scales the frequency of a cpu. */
   public static void setFrequency(int cpu, int frequency) {
-    setGovernor(cpu, "userspace");
+    setGovernor(cpu, SCALABLE_GOVERNOR);
     try (BufferedWriter reader =
         new BufferedWriter(new FileWriter(getFrequencyComponent(cpu, "scaling_setspeed")))) {
       reader.write(frequency);
@@ -65,7 +67,7 @@ public final class Dvfs {
 
   /** Sets the governor of a cpu to ondemand, which is typically the default. */
   public static void reset(int cpu) {
-    setGovernor(cpu, "ondemand");
+    setGovernor(cpu, DEFAULT_GOVERNOR);
   }
 
   /** Sets the governor of all cpus to ondemand, which is typically the default. */
@@ -76,14 +78,14 @@ public final class Dvfs {
   }
 
   private static String getFrequencyComponent(int cpu, String component) {
-    return String.join("/", String.format(FREQ_PATH, Integer.toString(cpu)), component);
+    return String.join("/", String.format(FREQ_PATH, cpu), component);
   }
 
   private static int[] readAvailableFrequencies() {
     try (BufferedReader reader =
         new BufferedReader(
             new FileReader(getFrequencyComponent(0, "scaling_available_frequencies")))) {
-      return Stream.of(reader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+      return Stream.of(reader.readLine().split(" ")).mapToInt(Integer::parseInt).sorted().toArray();
     } catch (Exception e) {
       return new int[0];
     }
