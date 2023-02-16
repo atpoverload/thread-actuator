@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 public final class Dvfs {
   private static final String FREQ_PATH = "/sys/devices/system/cpu/cpu%d/cpufreq";
   private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+  // the scalable frequencies that can be used on the cpus in KHz
   private static final int[] AVAILABLE_FREQUENCIES = readAvailableFrequencies();
   // TODO: the governors are not always the same so we may need to do some version control to
   // guarantee that the methods that change frequencies will not break
@@ -26,12 +27,26 @@ public final class Dvfs {
     return Arrays.copyOf(AVAILABLE_GOVERNORS, AVAILABLE_GOVERNORS.length);
   }
 
-  /** Gets the current frequency of a cpu. */
+  // TODO: these don't report an understandable value or log an error
+  /** Return current frequency of a cpu. */
+  public static int getScalingFrequency(int cpu) {
+    try (BufferedReader reader =
+        new BufferedReader(new FileReader(getFrequencyComponent(cpu, "scaling_cur_freq")))) {
+      return Integer.parseInt(reader.readLine());
+    } catch (Exception e) {
+      e.printStackTrace();
+      return 0;
+    }
+  }
+
+  // TODO: these don't report an understandable value or log an error
+  /** Gets the currently set frequency of a cpu. */
   public static int getFrequency(int cpu) {
     try (BufferedReader reader =
         new BufferedReader(new FileReader(getFrequencyComponent(cpu, "cpuinfo_cur_freq")))) {
       return Integer.parseInt(reader.readLine());
     } catch (Exception e) {
+      e.printStackTrace();
       return 0;
     }
   }
@@ -41,8 +56,9 @@ public final class Dvfs {
     setGovernor(cpu, SCALABLE_GOVERNOR);
     try (BufferedWriter reader =
         new BufferedWriter(new FileWriter(getFrequencyComponent(cpu, "scaling_setspeed")))) {
-      reader.write(frequency);
+      reader.write(String.format("%d", frequency));
     } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
@@ -52,6 +68,7 @@ public final class Dvfs {
         new BufferedReader(new FileReader(getFrequencyComponent(cpu, "scaling_governor")))) {
       return reader.readLine();
     } catch (Exception e) {
+      e.printStackTrace();
       return "";
     }
   }
@@ -62,6 +79,7 @@ public final class Dvfs {
         new BufferedWriter(new FileWriter(getFrequencyComponent(cpu, "scaling_governor")))) {
       reader.write(governor);
     } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
@@ -87,6 +105,7 @@ public final class Dvfs {
             new FileReader(getFrequencyComponent(0, "scaling_available_frequencies")))) {
       return Stream.of(reader.readLine().split(" ")).mapToInt(Integer::parseInt).sorted().toArray();
     } catch (Exception e) {
+      e.printStackTrace();
       return new int[0];
     }
   }
@@ -97,6 +116,7 @@ public final class Dvfs {
             new FileReader(getFrequencyComponent(0, "scaling_available_governors")))) {
       return reader.readLine().split(" ");
     } catch (Exception e) {
+      e.printStackTrace();
       return new String[0];
     }
   }
@@ -104,7 +124,7 @@ public final class Dvfs {
   private Dvfs() {}
 
   /** a class wrapping the static methods for specific cpus. */
-  public static class Cpu {
+  public static final class Cpu {
     public final int cpu;
 
     public Cpu(int cpu) {
@@ -112,6 +132,11 @@ public final class Dvfs {
     }
 
     /** Gets the current frequency of the cpu. */
+    public int getScalingFrequency() {
+      return Dvfs.getScalingFrequency(cpu);
+    }
+
+    /** Gets the currently set frequency of the cpu. */
     public int getFrequency() {
       return Dvfs.getFrequency(cpu);
     }
