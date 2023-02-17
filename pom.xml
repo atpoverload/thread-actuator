@@ -36,6 +36,12 @@
         <artifactId>protobuf-java-util</artifactId>
         <version>${protobuf.version}</version>
     </dependency> -->
+    <!-- https://mvnrepository.com/artifact/com.harium.sunflow/core -->
+    <dependency>
+        <groupId>com.harium.sunflow</groupId>
+        <artifactId>core</artifactId>
+        <version>0.07.5</version>
+    </dependency>
   </dependencies>
 
   <build>

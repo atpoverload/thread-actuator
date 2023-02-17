@@ -29,7 +29,7 @@ public final class Dvfs {
 
   // TODO: these don't report an understandable value or log an error
   /** Return current frequency of a cpu. */
-  public static int getScalingFrequency(int cpu) {
+  public static int getFrequency(int cpu) {
     try (BufferedReader reader =
         new BufferedReader(new FileReader(getFrequencyComponent(cpu, "scaling_cur_freq")))) {
       return Integer.parseInt(reader.readLine());
@@ -41,7 +41,7 @@ public final class Dvfs {
 
   // TODO: these don't report an understandable value or log an error
   /** Gets the currently set frequency of a cpu. */
-  public static int getFrequency(int cpu) {
+  public static int getScalingFrequency(int cpu) {
     try (BufferedReader reader =
         new BufferedReader(new FileReader(getFrequencyComponent(cpu, "cpuinfo_cur_freq")))) {
       return Integer.parseInt(reader.readLine());
@@ -105,7 +105,7 @@ public final class Dvfs {
             new FileReader(getFrequencyComponent(0, "scaling_available_frequencies")))) {
       return Stream.of(reader.readLine().split(" ")).mapToInt(Integer::parseInt).sorted().toArray();
     } catch (Exception e) {
-      e.printStackTrace();
+      System.out.println(String.format("unable to read %s: %s", "scaling_available_frequencies", e));
       return new int[0];
     }
   }
@@ -116,7 +116,7 @@ public final class Dvfs {
             new FileReader(getFrequencyComponent(0, "scaling_available_governors")))) {
       return reader.readLine().split(" ");
     } catch (Exception e) {
-      e.printStackTrace();
+      System.out.println(String.format("unable to read %s: %s", "scaling_available_governors", e));
       return new String[0];
     }
   }
@@ -132,13 +132,13 @@ public final class Dvfs {
     }
 
     /** Gets the current frequency of the cpu. */
-    public int getScalingFrequency() {
-      return Dvfs.getScalingFrequency(cpu);
+    public int getFrequency() {
+      return Dvfs.getFrequency(cpu);
     }
 
     /** Gets the currently set frequency of the cpu. */
-    public int getFrequency() {
-      return Dvfs.getFrequency(cpu);
+    public int getScalingFrequency() {
+      return Dvfs.getScalingFrequency(cpu);
     }
 
     /** Scales the frequency of the cpu. */
@@ -163,17 +163,24 @@ public final class Dvfs {
   }
 
   public static void main(String[] args) throws Exception {
+    if (AVAILABLE_FREQUENCIES.length == 0) {
+      System.out.println("Unable to initialize DVFS");
+      return;
+    }
+
     System.out.println("DVFS initialized");
 
     System.out.println(String.format("CPU count: %d", CPU_COUNT));
     System.out.println(
-        String.format("Available frequencies: %s", Arrays.toString(AVAILABLE_FREQUENCIES)));
+        String.format("Available governors: %s", Arrays.toString(AVAILABLE_GOVERNORS)));
+    System.out.println(
+      String.format("Available frequencies: %s", Arrays.toString(AVAILABLE_FREQUENCIES)));
     for (int i = 0; i < CPU_COUNT; i++) {
       Dvfs.Cpu cpu = new Dvfs.Cpu(i);
       System.out.println(
           String.format(
-              "CPU %d - governor: %s, frequency: %d",
-              cpu.cpu, cpu.getGovernor(), cpu.getFrequency()));
+              "CPU %d - governor: %s, scaling frequency: %d, frequency: %d",
+              cpu.cpu, cpu.getGovernor(), cpu.getScalingFrequency(), cpu.getFrequency()));
     }
   }
 }
