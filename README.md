@@ -15,8 +15,7 @@ they you can restart your system and you should be able to set the DVFS governor
 
 # running
 
-<!-- TODO(timur): do we actually need sudo? -->
-you can run `sudo smoke_test.sh` to confirm that DVFS can be changed. if that works, you should be good to use it with other deps.
+you can run `mvn clean install && sudo java -cp target/clerk-0.1.0.jar` to confirm that DVFS can be changed. if that works, you should be good to use it with other deps.
 
 # notes
 
