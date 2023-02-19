@@ -21,8 +21,7 @@ public final class DvfsCli {
         String.join("\n", "CPU %" + PADDING + "d", "governors: %s", "frequencies: %s"),
         cpu.cpu,
         Arrays.toString(Dvfs.getAvailableGovernors(cpu.cpu)),
-        Arrays.toString(
-            Arrays.stream(cpu.getAvailableFrequencies()).mapToDouble(DvfsCli::khzToGhz).toArray()));
+        Arrays.toString(cpu.getAvailableFrequencies()));
   }
 
   private static String cpuSnapshot(Dvfs.Cpu cpu) {
@@ -45,7 +44,7 @@ public final class DvfsCli {
 
   private static void printSnapshot() {
     for (int cpu = 0; cpu < CPU_COUNT; cpu++) {
-        logger.info(cpuSnapshot(new Dvfs.Cpu(cpu)));
+      logger.info(cpuSnapshot(new Dvfs.Cpu(cpu)));
     }
   }
 

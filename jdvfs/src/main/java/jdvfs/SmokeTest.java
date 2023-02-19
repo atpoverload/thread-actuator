@@ -32,7 +32,8 @@ public final class SmokeTest {
     }
 
     if (availableCpus.isEmpty()) {
-      logger.info("'cpufreq' not found for this system. make sure you have it installed or are running as 'sudo'.");
+      logger.info(
+          "'cpufreq' not found for this system. make sure you have it installed or are running as 'sudo'.");
       return;
     }
 
