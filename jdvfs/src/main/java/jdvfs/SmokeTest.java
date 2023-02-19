@@ -10,7 +10,7 @@ public final class SmokeTest {
   private static final Logger logger = LoggerUtil.getLogger();
 
   private static boolean isGrubUpdated() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("etc/default/grub"))) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("/etc/default/grub"))) {
       return reader
           .lines()
           .anyMatch(
@@ -49,7 +49,7 @@ public final class SmokeTest {
       if (!isGrubUpdated()) {
         logger.info(
             "'dvfs' not found for this system. make sure you modified your grub file"
-                + " ('etc/default/grub') by adding 'intel_pstate=disable'"
+                + " ('/etc/default/grub') by adding 'intel_pstate=disable'"
                 + " to the 'GRUB_CMDLINE_LINUX_DEFAULT' entry.");
         return;
       } else {
