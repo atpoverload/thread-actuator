@@ -33,6 +33,20 @@ public final class DvfsCli {
         khzToGhz(cpu.getObservedFrequency()));
   }
 
+  private static void printTrace() {
+    System.out.println("unixtime,cpu,governor,real,observed");
+    while (true) {
+      long now = System.currentTimeMillis();
+      for (int n = 0; n < CPU_COUNT; n++) {
+        Dvfs.Cpu cpu = new Dvfs.Cpu(n);
+        System.out.println(
+            String.format(
+                "%d,%s,%s,%d,%d",
+                now, cpu.cpu, cpu.getGovernor(), cpu.getFrequency(), cpu.getObservedFrequency()));
+      }
+    }
+  }
+
   private static void printSummary() {
     logger.info("DVFS summary");
 
@@ -49,6 +63,19 @@ public final class DvfsCli {
   }
 
   public static void main(String[] args) throws Exception {
+    if (Arrays.stream(args).anyMatch(s -> s.equals("--help"))) {
+      System.out.println("\t--summary: shows the available settings for cpus");
+      System.out.println("\t--snapshot: shows the available settings for cpus");
+      System.out.println("\t--trace: writes snapshots as csv until terminated");
+      System.out.println("\t--reset: sets cpus to the default governor (ondemand)");
+      return;
+    }
+
+    if (Arrays.stream(args).anyMatch(s -> s.equals("--trace"))) {
+      printTrace();
+      return;
+    }
+
     if ((args.length == 0) || Arrays.stream(args).anyMatch(s -> s.equals("--summary"))) {
       printSummary();
     }
@@ -60,6 +87,7 @@ public final class DvfsCli {
     if (Arrays.stream(args).anyMatch(s -> s.equals("--reset"))) {
       Dvfs.reset();
       logger.info("all cpus reset to the default");
+      return;
     }
   }
 }
