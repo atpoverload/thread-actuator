@@ -40,7 +40,7 @@ public final class SmokeTest {
 
     ArrayList<Integer> availableDvfs = new ArrayList<>();
     for (int cpu : availableCpus) {
-      if (Dvfs.getFrequency(cpu) == 0) {
+      if (Dvfs.getFrequency(cpu) > 0) {
         availableDvfs.add(cpu);
       }
     }
