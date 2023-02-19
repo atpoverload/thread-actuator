@@ -51,12 +51,12 @@ public final class SmokeTest {
             "'dvfs' not found for this system. make sure you modified your grub file"
                 + " ('/etc/default/grub') by adding 'intel_pstate=disable'"
                 + " to the 'GRUB_CMDLINE_LINUX_DEFAULT' entry.");
-        return;
       } else {
         logger.info(
             "grub is updated but still unable to read scaling frequency."
                 + " do you need to run as 'sudo'?");
       }
+      return;
     }
 
     logger.info(String.format("'dvfs' available for cpus: %s", availableDvfs));

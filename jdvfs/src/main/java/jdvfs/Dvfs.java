@@ -102,7 +102,7 @@ public final class Dvfs {
                     try {
                       return Integer.parseInt(f);
                     } catch (NumberFormatException nfe) {
-                      nfe.printStackTrace();
+                      // nfe.printStackTrace();
                       return 0;
                     }
                   })
@@ -134,7 +134,7 @@ public final class Dvfs {
         new BufferedReader(new FileReader(getFrequencyComponent(cpu, component)))) {
       return reader.readLine();
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       return "";
     }
   }
@@ -145,7 +145,7 @@ public final class Dvfs {
       writer.write(value);
       return true;
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       return false;
     }
   }

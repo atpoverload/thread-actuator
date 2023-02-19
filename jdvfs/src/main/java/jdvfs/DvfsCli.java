@@ -19,7 +19,7 @@ public final class DvfsCli {
   private static String cpuSummary(Dvfs.Cpu cpu) {
     return String.format(
         String.join("\n", "CPU %" + PADDING + "d", "governors: %s", "frequencies: %s"),
-        cpu,
+        cpu.cpu,
         Arrays.toString(Dvfs.getAvailableGovernors(cpu.cpu)),
         Arrays.toString(
             Arrays.stream(cpu.getAvailableFrequencies()).mapToDouble(DvfsCli::khzToGhz).toArray()));
