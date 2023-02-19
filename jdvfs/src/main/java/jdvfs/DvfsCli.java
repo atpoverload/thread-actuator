@@ -13,7 +13,7 @@ public final class DvfsCli {
   private static final int PADDING = (int) Math.floor(Math.log10((double) CPU_COUNT)) + 1;
 
   private static double khzToGhz(int freq) {
-    return Math.round(freq / 1000) / 1000;
+    return (double) Math.round(freq / 1000) / 1000;
   }
 
   private static String cpuSummary(Dvfs.Cpu cpu) {

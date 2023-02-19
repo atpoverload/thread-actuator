@@ -53,7 +53,7 @@ public final class SmokeTest {
                 + " to the 'GRUB_CMDLINE_LINUX_DEFAULT' entry.");
       } else {
         logger.info(
-            "grub is updated but still unable to read scaling frequency."
+            "grub is updated but still unable to read scaling frequencies."
                 + " do you need to run as 'sudo'?");
       }
       return;
