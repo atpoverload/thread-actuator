@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "jdvfs.sandbox";
+
+package jdvfs;
+
+service DvfsService {
+  rpc GetDvfsCpus (GetDvfsCpusRequest) returns (GetDvfsCpusResponse) {}
+}
+
+message GetDvfsCpusRequest {}
+
+message GetDvfsCpusResponse {
+  message CpuInfo {
+    // the cpu id for the system
+    int32 cpu_id = 1;
+    // power governors available on the cpu
+    repeated string governor = 2;
+    // frequencies the cpu can be set to
+    repeated int32 frequency = 3;
+  }
+
+  repeated CpuInfo cpu = 1;
+}
