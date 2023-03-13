@@ -18,12 +18,12 @@ public class CornellBox extends SunflowAPI {
   @Override
   public void build() {
     // check if one of the knobs is actuation
-    if (!knobs.actuation().isEmpty()) {
-      PluginRegistry.imageSamplerPlugins.registerPlugin("bucket", ActuatedBucketRenderer.class);
-      parameter(
-          ActuatedBucketRenderer.ACTUATION_PARAMETERS,
-          ActuatedBucketRenderer.toActuationString(knobs.actuation()));
-    }
+    // if (!knobs.actuation().isEmpty()) {
+    //   PluginRegistry.imageSamplerPlugins.registerPlugin("bucket", ActuatedBucketRenderer.class);
+    //   parameter(
+    //       ActuatedBucketRenderer.ACTUATION_PARAMETERS,
+    //       ActuatedBucketRenderer.toActuationString(knobs.actuation()));
+    // }
 
     parameter("threads", knobs.threads());
     // spawn regular priority threads

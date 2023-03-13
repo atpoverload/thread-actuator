@@ -66,7 +66,7 @@ public final class DvfsCli {
     if (Arrays.stream(args).anyMatch(s -> s.equals("--help"))) {
       System.out.println("\t--summary: shows the available settings for cpus");
       System.out.println("\t--snapshot: shows the available settings for cpus");
-      System.out.println("\t--trace: writes snapshots as csv until terminated");
+      System.out.println("\t--trace: writes snapshots as a csv until terminated");
       System.out.println("\t--reset: sets cpus to the default governor (ondemand)");
       return;
     }

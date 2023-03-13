@@ -1,21 +1,17 @@
 package si.um.feri.lpm.green.sunflowload;
 
-import java.util.Map;
-
 public final class SunflowKnobs {
   private final int threads;
   private final int resolution;
   private final int aaMin;
   private final int aaMax;
-  private final Map<Integer, Integer> actuation;
 
   public SunflowKnobs(
-      int threads, int resolution, int aaMin, int aaMax, Map<Integer, Integer> actuation) {
+      int threads, int resolution, int aaMin, int aaMax) {
     this.threads = threads;
     this.resolution = resolution;
     this.aaMin = aaMin;
     this.aaMax = aaMax;
-    this.actuation = actuation;
   }
 
   public int threads() {
@@ -32,9 +28,5 @@ public final class SunflowKnobs {
 
   public int aaMax() {
     return this.aaMax;
-  };
-
-  public Map<Integer, Integer> actuation() {
-    return this.actuation;
   };
 }
